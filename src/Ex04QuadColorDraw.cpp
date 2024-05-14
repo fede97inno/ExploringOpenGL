@@ -4,14 +4,7 @@
 #include <iostream>
 #include "OGLProgram.h"
 #include <cmath>
-
-struct Color
-{
-    float r;
-    float g;
-    float b;
-    float a;
-};
+#include "Common.h"
 
 void Ex04QuadColorDraw::Start() 
 {

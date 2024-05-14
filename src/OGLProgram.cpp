@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include "Common.h"
 
 static std::string ReadFile(const std::string& inPath)  // With static we can use the same name for differents functions
 {
@@ -101,4 +102,14 @@ void OGLProgram::Bind()
 const GLuint OGLProgram::GetId() const
 {
     return programId;
+}
+
+void OGLProgram::SetUniform(const std::string& inName, const Color& inColor)
+{
+    glUniform4fv(glGetUniformLocation(GetId(), inName.c_str()), 1, reinterpret_cast<const GLfloat*>(&inColor));
+}
+
+void OGLProgram::SetUniform(const std::string& inName, const float inValue)
+{
+    glUniform1f(glGetUniformLocation(GetId(), inName.c_str()), inValue);
 }

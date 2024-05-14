@@ -6,53 +6,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <iostream>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-struct Color
-{
-    float r;
-    float g;
-    float b;
-    float a;
-};
-
-GLuint CreateTexture(const std::string& inFilePath)
-{
-    stbi_set_flip_vertically_on_load(true); //this flips y, impact everything that cames after, but if u do this u will do it only the first time
-    
-    int width, height, channels;
-    unsigned char* data = stbi_load(inFilePath.c_str(), &width, &height, &channels, 0);
-
-    if (data == nullptr)
-    {
-        std::cout << "Error Reading Image" << std::endl;
-        throw std::runtime_error("Error Reading Image");
-    }
-
-    GLenum format = channels == 3 ? GL_RGB : GL_RGBA;
-
-    GLuint textureId;
-    glGenTextures(1, &textureId);               // Num of texture, textureId(to fill)
-    glBindTexture(GL_TEXTURE_2D, textureId);    // type of texture, textureId
-
-    // Load Data to GPU
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-
-    // Wrapping
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // x y <-> u v <-> s t
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    // Filtering
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);     // When the texture became smaller
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_NEAREST);    // When the texture became bigger
-
-    // MipMapping -> optional
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    return textureId;
-}
+#include "Common.h"
 
 void Ex05QuadTextureDraw::Start() 
 {
@@ -103,27 +57,32 @@ void Ex05QuadTextureDraw::Start()
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     program->Bind();
 
-    GLint baseColorLocation = glGetUniformLocation(program->GetId(), "base_color");
-    Color colorVar{0.5f, 0.5f, 0.5f, 1.0f};
-    const GLfloat* colorVarPtr = reinterpret_cast<GLfloat*>(&colorVar);
-    glUniform4fv(baseColorLocation, 1, colorVarPtr);
+    //GLint baseColorLocation = glGetUniformLocation(program->GetId(), "base_color");
+    //Color colorVar{0.5f, 0.5f, 0.5f, 1.0f};
+    //const GLfloat* colorVarPtr = reinterpret_cast<GLfloat*>(&colorVar);
+    //glUniform4fv(baseColorLocation, 1, colorVarPtr);
+    program->SetUniform("base_color", {0.5f, 0.5f, 0.5f, 1.0f});
 
     // 6. Create Texture
-    GLuint smileTextureId = CreateTexture("resources/textures/smile.png");
-    GLuint woodTextureId = CreateTexture("resources/textures/wood-box.jpg");
-    
-    glActiveTexture(GL_TEXTURE0);   // Active the spot where to put the texture
-    glBindTexture(GL_TEXTURE_2D, smileTextureId);
+    smileTexture = new OGLTexture("resources/textures/smile.png");
+    woodBoxTexture = new OGLTexture("resources/textures/wood-box.jpg");
 
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, woodTextureId);
+    //GLuint smileTextureId = CreateTexture("resources/textures/smile.png");
+    //GLuint woodTextureId = CreateTexture("resources/textures/wood-box.jpg");
+    
+    smileTexture->Bind(GL_TEXTURE0);
+    woodBoxTexture->Bind(GL_TEXTURE1);
+
+    //glActiveTexture(GL_TEXTURE0);   // Active the spot where to put the texture
+    //glBindTexture(GL_TEXTURE_2D, smileTexture->GetId());
+    //glActiveTexture(GL_TEXTURE1);
+    //glBindTexture(GL_TEXTURE_2D, woodBoxTexture->GetId());
 
     glUniform1i(glGetUniformLocation(program->GetId(), "wood_box_tex"), 1);     // Set the layout to 1
 
     // 7. Enable Alpha Blending
     glEnable(GL_BLEND);
-   // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // 1 - src
-
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // 1 - src
 }
 
 void Ex05QuadTextureDraw::Update(float inDeltaTime)
@@ -138,6 +97,8 @@ void Ex05QuadTextureDraw::Destroy()
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
 
+    delete smileTexture;
+    delete woodBoxTexture;
     delete program;
 }
 

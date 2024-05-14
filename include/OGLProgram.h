@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Common.h"
 #include <glad/glad.h>
 
 class OGLProgram
@@ -9,6 +10,8 @@ public:
     ~OGLProgram();
     void Bind();
     const GLuint GetId() const;
+    void SetUniform(const std::string& inName, const Color& inColor);
+    void SetUniform(const std::string& inName, float inValue);
 private:
     GLuint programId;
 };
