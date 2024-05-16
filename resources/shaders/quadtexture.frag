@@ -14,5 +14,17 @@ void main()
     vec4 smile_texel = texture(smile_tex, vert_uv_out);     // texel is the smallest texture unit, in our case is equal to pixel
     vec4 wood_box_texel = texture(wood_box_tex, vert_uv_out);
 
-    frag_color = mix(smile_texel, wood_box_texel, 0.5f);    // blend two text, the last is the percentage of each
+//   if (smile_texel.a == 1)
+//   {
+//      frag_color = mix(smile_texel, wood_box_texel, 0.5f);    // blend two text, the last is the percentage of each
+//   }
+//   else
+//   {
+//      frag_color = wood_box_texel;
+//   }
+    // 1 is tot percentage 
+
+    float gradient = smile_texel.a * 0.5f; // gradient goes to 0 to 1 -> 1 when there's only the box
+
+    frag_color = mix(wood_box_texel, smile_texel, gradient);
 }

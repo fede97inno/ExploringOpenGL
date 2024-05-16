@@ -6,6 +6,7 @@
 #include "Ex03QuadIndexDraw.h"
 #include "Ex04QuadColorDraw.h"
 #include "Ex05QuadTextureDraw.h"
+#include "Ex05DoubleArray.h"
 #include "Ex06QuadPerspectiveDraw.h"
 #include "Ex07CubePerspectiveDraw.h"
 
@@ -21,8 +22,9 @@ int main()
 	//Ex03QuadIndexDraw Scene;
 	//Ex04QuadColorDraw Scene;
 	//Ex05QuadTextureDraw Scene;
+	Ex05DoubleArray Scene;
 	//Ex06QuadPerspectiveDraw Scene;
-	Ex07CubePerspectiveDraw Scene;
+	//Ex07CubePerspectiveDraw Scene;
 	Scene.Start();
 
 	while (window.IsOpened())
