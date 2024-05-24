@@ -62,6 +62,12 @@
         "vector": "cpp",
         "array": "cpp",
         "map": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "cstdarg": "cpp",
+        "functional": "cpp",
+        "iomanip": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "xhash": "cpp"
     }
 }

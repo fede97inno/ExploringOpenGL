@@ -113,3 +113,14 @@ void OGLProgram::SetUniform(const std::string& inName, const float inValue)
 {
     glUniform1f(glGetUniformLocation(GetId(), inName.c_str()), inValue);
 }
+
+void OGLProgram::SetUniform(const std::string& inName, const glm::mat4& inMatrix)
+{
+    glUniformMatrix4fv(glGetUniformLocation(GetId(), inName.c_str()), 1, GL_FALSE, &inMatrix[0][0]);    // Transpose -> false we already have the data in the order that gpu want.
+                                                                                                        // &inMatrix[0][0] -> is the address of the first element of the matrix
+}
+
+void OGLProgram::SetUniform(const std::string& inName, const glm::vec3& inVec3)
+{
+    glUniform3fv(glGetUniformLocation(GetId(), inName.c_str()), 1, &inVec3[0]);
+}
