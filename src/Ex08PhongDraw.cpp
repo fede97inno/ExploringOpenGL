@@ -111,10 +111,11 @@ void Ex08PhongDraw::Start()
 
     view = glm::lookAt(position, position + direction, cameraUp);   // View Matrix -> lookAt(postion, where i'm looking, up)
     projection = glm::perspective(glm::radians(fovY), aspectRatio, zNear, zFar);
+    program->SetUniform("camera_pos", position);
 
     // Light
     glm::vec3 pointLightPos = glm::vec3(4, 0, 0);
-    Program->SetUniform("point_light_pos", pointLightPos);
+    program->SetUniform("point_light_pos", pointLightPos);
 }
 
 void Ex08PhongDraw::Update(float inDeltaTime)
@@ -145,6 +146,7 @@ void Ex08PhongDraw::Update(float inDeltaTime)
     glm::mat4 mvp = projection * view * model;
 
     program->SetUniform("mvp", mvp);
+    program->SetUniform("model", model);
 
     glDrawArrays(GL_TRIANGLES, 0, verticesCount);
 }
