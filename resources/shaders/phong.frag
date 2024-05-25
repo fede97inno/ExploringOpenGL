@@ -58,7 +58,7 @@ void main()
     // attenuation = constant + linear * distance + quadratic * distance^2 
 
     float k_c = 1.0f;           // Generally set to one cause stop division by 0
-    float k_l = 0.045f;         // Values taken from OgreWiki
+    float k_l = 0.045f;         // Values taken from OgreWiki range -> the limit where the light became black 
     float k_d = 0.0075f;
 
     float dist = length(point_light_pos - vert_world_pos_out);

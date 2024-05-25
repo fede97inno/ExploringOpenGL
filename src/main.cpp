@@ -10,6 +10,7 @@
 #include "Ex06QuadPerspectiveDraw.h"
 #include "Ex07CubePerspectiveDraw.h"
 #include "Ex08PhongDraw.h"
+#include "Ex09InstancingDraw.h"
 
 int main() 
 {
@@ -26,7 +27,8 @@ int main()
 	//Ex05DoubleArray Scene;
 	//Ex06QuadPerspectiveDraw Scene;
 	//Ex07CubePerspectiveDraw Scene;
-	Ex08PhongDraw Scene;
+	//Ex08PhongDraw Scene;
+	Ex09InstancingDraw Scene;
 	Scene.Start();
 
 	while (window.IsOpened())
