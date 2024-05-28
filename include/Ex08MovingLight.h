@@ -19,6 +19,7 @@ private:
     OGLProgram* program;
     OGLProgram* programLight;
     OGLTexture* stormTexture;
+    OGLTexture* lightTexture;
     glm::mat4 view;
     glm::mat4 projection;
     size_t verticesCount;

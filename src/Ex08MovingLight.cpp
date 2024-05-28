@@ -89,7 +89,7 @@ void Ex08MovingLight::Start()
 
     // 5. Create Texture
     stormTexture = new OGLTexture("resources/models/stormtrooper.png");
-    stormTexture->Bind(GL_TEXTURE0);
+    //stormTexture->Bind(GL_TEXTURE0);
 
     // 6. Enable DepthTesting
     glEnable(GL_DEPTH_TEST);    // draw first the near faces
@@ -194,6 +194,8 @@ void Ex08MovingLight::Start()
     GLuint lightLocation_1 = 1;
     glVertexAttribPointer(lightLocation_1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));  // location in triangle.vert, how many elements, type of the elements, if u want to normalize your elements, when the row finish, where to begin
     glEnableVertexAttribArray(location_1);
+
+    lightTexture = new OGLTexture("resources/textures/wood-box.jpg");
 }
 
 void Ex08MovingLight::Update(float inDeltaTime)
@@ -223,11 +225,11 @@ void Ex08MovingLight::Update(float inDeltaTime)
     
     programLight->SetUniform("mvp", mvpLight);
 
+    lightTexture->Bind(GL_TEXTURE0);
     glDrawArrays(GL_TRIANGLES, 0, 36);
  
     program->Bind();
     glBindVertexArray(vao);
-
 
     // Model matrix = Translate * Rotate * Scale
     glm::mat4 model = glm::mat4(1.0f);                                      // Identity Matrix
@@ -236,15 +238,18 @@ void Ex08MovingLight::Update(float inDeltaTime)
     model = glm::scale(model, glm::vec3(2.0f));                             // Apply Scaling(origin matrix, scaling vector3)
 
     glm::mat4 mvp = projection * view * model;
-    glm::vec3 pointLightPos = glm::vec3(4, 0, 0);
+    //glm::vec3 pointLightPos = glm::vec3(4, 0, 0);
+
+    glm::mat4 lightWorldPositionMatrix = rotateAround * lightModel;
+    glm::vec4 lightWorldPosition = lightWorldPositionMatrix * glm::vec4(lightPosition, 1.0f);
+    glm::vec3 pointLightPos = glm::vec3(lightWorldPosition);
 
     program->SetUniform("mvp", mvp);
     program->SetUniform("model", model);
     program->SetUniform("point_light_pos", pointLightPos);
+    stormTexture->Bind(GL_TEXTURE0);
     
     glDrawArrays(GL_TRIANGLES, 0, verticesCount);
-
-
 }
 
 void Ex08MovingLight::Destroy()
@@ -256,6 +261,7 @@ void Ex08MovingLight::Destroy()
     glDeleteBuffers(1, &vboLight);
 
     delete stormTexture;
+    delete lightTexture;
     delete program;
     delete programLight;
 }
